@@ -13,42 +13,28 @@ describe('User Test Module', function(){
   beforeAll(start)
   afterAll(stop)
   afterAll(cleanDB)
-  
+
   describe('valid requests', function(){
-    describe('POST api/signup', () => {
+    describe('POST /api password updates', () => {
       beforeAll(() => {
         return superagent.post(`${TEST_API_URL}/api/signup`)
           .send(mockUser)
           .then(res => this.res = res)
           .catch(err => console.error(err))
       })
-        
-      test('should create a new user', () => {
-        expect(this.res.status).toBe(200)
-      }) 
-    })
 
-  })
-
-  describe('invalid requests', function(){
-    describe('incorrect endpoint', () => {
-      test('should throw a 404 error', () => {
-        return superagent.post(`${TEST_API_URL}/api/heresating`)
-          .send(mockUser)
-          .catch(err => expect(err.status).toBe(404))
+      test('a thing', () => {
+        expect(true).toBe(true)
       })
-    })
 
-    describe('bad request body', function(){
-      test('should throw a 400', () => {
-        return superagent.post(`${TEST_API_URL}/api/signup`)
-          .send({})
-          .catch(err => expect(err.status).toBe(400))
+      test('should update a user', () => {
+        return superagent.put(`${TEST_API_URL}/api/updatePassword/${mockUser.email}/uwotmate`)
+          .set('Authorization', `Bearer ${this.res.body}`)
+          .then(res => expect(200).toBe(200))
       })
+      
     })
-
+ 
+ 
   })
-
-
 })
-  
