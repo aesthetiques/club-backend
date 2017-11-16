@@ -15,7 +15,7 @@ env:
 # safelist
 branches:
   only:
-    - dev
+    - development
     - master
 sudo: required
 before_script: npm i
