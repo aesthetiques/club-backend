@@ -16,6 +16,7 @@ const userSchema = Schema({
   password: {type: String, required: true},  
   email: {type: String, required: true, unique: true},
   username: {type: String, required: true, unique: true},
+  trueAdmin: {type: Boolean, required: true, default: false},
 })
 
 userSchema.methods.generatePasswordHash = function(password){
@@ -88,10 +89,30 @@ User.signup = function(userData, password){
     .catch(err => Promise.reject(createError(err.message)))
 }
 
+User.signin = function(userData){
+  debug('#login')
+  if(!userData.username) return Promise.reject(createError(400, 'username required'))
+  if(!userData.password) return Promise.reject(400, 'Password required')
+
+  return User.findOne({username: userData.username})
+    .then(user => user.comparePasswordHash(userData.password))
+    .then(user => user.generateToken())
+    .then(token => token)
+    .catch(err => Promise.reject(createError(err.status, err.message)))
+}
+
+User.listUsers = function(){
+  debug('#listUsers')
+
+  return User.find()
+    .then(userList => Promise.resolve(userList))
+    .catcH(err => Promise.reject(createError(err.status, err.message)))
+}
+
 User.forgotPassword = function(email){
   debug('#resetPassword')
   if(!email) return Promise.reject(createError(400, 'no email included'))
-
+  
   let randomPassword = faker.internet.ip()
 
   return User.findOneAndUpdate(email, { password: randomPassword })
@@ -119,15 +140,11 @@ User.updatePassword = function(email, password){
     .catch(err => Promise.reject(createError(err.status, err.message)))
 }
 
-User.signin = function(userData){
-  debug('#login')
-  if(!userData.username) return Promise.reject(createError(400, 'username required'))
-  if(!userData.password) return Promise.reject(400, 'Password required')
-
-  return User.findOne({username: userData.username})
-    .then(user => user.comparePasswordHash(userData.password))
-    .then(user => user.generateToken())
-    .then(token => token)
+User.deleteUser = function(email){
+  if(!email) return Promise.reject(createError(400, 'no email included'))
+  
+  return User.findOneAndRemove(email)
+    .then(user => Promise.resolve(user))
     .catch(err => Promise.reject(createError(err.status, err.message)))
 }
 

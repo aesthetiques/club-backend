@@ -20,6 +20,22 @@ module.exports = function(router){
       .catch(err => res.status(err.status).send(err.message))
   })
 
+  router.get('/signin', basicAuth, (req, res) => {
+    debug('#GET /signin')
+
+    User.signin(req.auth)
+      .then(token => res.json(token))
+      .catch(err => res.status(err.status).send(err.message))
+  })
+
+  router.get('/userList', bearerAuth, (req, res) => {
+    debug('#GET /userList')
+
+    User.listUsers()
+      .then(list => res.json(list))
+      .catch(err => res.status(err.stauts).send(err))
+  })
+
   router.put('/forgotPassword/:email', (req, res) => {
     debug('#PUT /forgotPassword/:email')
 
@@ -32,7 +48,7 @@ module.exports = function(router){
       .catch(err => res.status(err.status).send(err))
   })
   
-  router.put('/updatePassword/:email/:password', (req, res) => {
+  router.put('/updatePassword/:email/:password', bearerAuth, (req, res) => {
     debug('#PUT /updatePassword/:email/:password')
 
     let tempEmail = req.params.email
@@ -48,12 +64,16 @@ module.exports = function(router){
       .catch(err => res.status(err.status).send(err))
   })
 
-  router.get('/signin', basicAuth, (req, res) => {
-    debug('#GET /signin')
+  router.delete('/deleteUser/:email', bearerAuth, (req, res) => {
+    debug('#DELETE /deleteUser/:email')
 
-    User.signin(req.auth)
-      .then(token => res.json(token))
-      .catch(err => res.status(err.status).send(err.message))
+    let tempEmail = req.params.email
+    req.params.email = null
+    delete req.params.email
+
+    User.deleteUser(tempEmail)
+      .then(deletedUser => deletedUser)
+      .catch(err => res.status(err.status).send(err))
   })
 
   return router
