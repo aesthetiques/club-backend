@@ -1,7 +1,8 @@
 'use strict'
 
 import bcrypt from 'bcrypt'
-import crypto from 'crypto'
+import crypto, { randomBytes } from 'crypto'
+import faker from 'faker'
 import jwt from 'jsonwebtoken'
 import Promise from 'bluebird'
 import mongoose from 'mongoose'
@@ -87,6 +88,25 @@ User.signup = function(userData, password){
     .catch(err => Promise.reject(createError(err.message)))
 }
 
+User.forgotPassword = function(email){
+  debug('#resetPassword')
+  if(!email) return Promise.reject(createError(400, 'no email included'))
+
+  let randomPassword = faker.internet.ip()
+
+  return User.findOneAndUpdate(email, { password: randomPassword })
+    .then(user => user.generatePasswordHash(randomPassword))
+    .then(user => user.generateToken())
+    .then(token => Promise.resolve(token))
+    .then(() => {
+      return {
+        randomPassword,
+        email
+      }
+    })
+    .catch(err => Promise.reject(createError(err.status, err.message)))
+}
+
 User.signin = function(userData){
   debug('#login')
   if(!userData.username) return Promise.reject(createError(400, 'username required'))
@@ -96,7 +116,7 @@ User.signin = function(userData){
     .then(user => user.comparePasswordHash(userData.password))
     .then(user => user.generateToken())
     .then(token => token)
-    .catch(() => Promise.reject(createError(401, 'Not authorized')))
+    .catch(err => Promise.reject(createError(err.status, err.message)))
 }
 
 export default User

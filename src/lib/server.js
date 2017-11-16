@@ -1,6 +1,6 @@
 'use strict'
 
-require('dotenv').config()
+require('dotenv').config({ path: `${__dirname}/../../.dev.env` })
 
 import cors from 'cors'
 import express from 'express'

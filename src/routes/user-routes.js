@@ -20,6 +20,14 @@ module.exports = function(router){
       .catch(err => res.status(err.status).send(err.message))
   })
 
+  router.put('/forgotPassword/:email', (req, res) => {
+    debug('#PUT /forgotPassword')
+
+    User.forgotPassword(req.params.email)
+      .then(token => res.json(token))
+      .catch(err => res.status(err.status).send(err))
+  })
+  
   router.get('/signin', basicAuth, (req, res) => {
     debug('#GET /signin')
 

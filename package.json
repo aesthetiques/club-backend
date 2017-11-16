@@ -22,7 +22,7 @@
       }
     },
     "testMatch": [
-      "<rootDir>/__tests__/test/*-test.js"
+      "<rootDir>/__tests__/test/**/*-test.js"
     ]
   },
   "scripts": {
@@ -48,6 +48,7 @@
     "dotenv": "^4.0.0",
     "expect": "^21.2.1",
     "express": "^4.16.2",
+    "faker": "^4.1.0",
     "fs-extra": "^4.0.2",
     "http-errors": "^1.6.2",
     "jsonwebtoken": "^8.1.0",
@@ -61,7 +62,6 @@
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "eslint": "^4.9.0",
-    "faker": "^4.1.0",
     "istanbul": "^0.4.5",
     "jest": "^21.2.1",
     "jest-cli": "^21.2.1"
