@@ -19,7 +19,7 @@ import imageRoutes from '../routes/image-routes'
 import directoryRoutes from '../routes/directory-routes'
 
 //.env variables:
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT
 const VER = process.env.VER || '0.1.0'
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/club-dev'
 
