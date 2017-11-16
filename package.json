@@ -26,6 +26,7 @@
     ]
   },
   "scripts": {
+    "start": "node server.js", 
     "test": "jest --runInBand",
     "test-watch": "jest --runInBand --watchAll",
     "watch": "DEBUG=club-dev nodemon index.js"

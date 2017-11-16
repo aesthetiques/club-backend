@@ -15,9 +15,9 @@ env:
 # safelist
 branches:
   only:
-    - dev
+    - development
     - master
 sudo: required
-before_script: npm i
+before_script: yarn install
 script:
-  - npm test
+  - yarn test
