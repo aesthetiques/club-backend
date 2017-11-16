@@ -1,7 +1,7 @@
 'use strict'
 
 import bcrypt from 'bcrypt'
-import crypto, { randomBytes } from 'crypto'
+import crypto, { randomBytes, createECDH } from 'crypto'
 import faker from 'faker'
 import jwt from 'jsonwebtoken'
 import Promise from 'bluebird'
@@ -97,13 +97,25 @@ User.forgotPassword = function(email){
   return User.findOneAndUpdate(email, { password: randomPassword })
     .then(user => user.generatePasswordHash(randomPassword))
     .then(user => user.generateToken())
-    .then(token => Promise.resolve(token))
+    .then(token => token)
     .then(() => {
       return {
         randomPassword,
         email
       }
     })
+    .catch(err => Promise.reject(createError(err.status, err.message)))
+}
+
+User.updatePassword = function(email, password){
+  if(!email) return Promise.reject(createError(400, 'no email included'))
+  if(!password) return Promise.reject(createError(400, 'no password included'))
+
+  return User.findOneAndUpdate(email, {password: password})
+    .then(user => user.generatePasswordHash(password))
+    .then(user => user.generateToken())
+    .then(token => token)
+    .then(() => password)
     .catch(err => Promise.reject(createError(err.status, err.message)))
 }
 

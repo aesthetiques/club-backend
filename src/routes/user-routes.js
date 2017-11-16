@@ -21,13 +21,33 @@ module.exports = function(router){
   })
 
   router.put('/forgotPassword/:email', (req, res) => {
-    debug('#PUT /forgotPassword')
+    debug('#PUT /forgotPassword/:email')
 
-    User.forgotPassword(req.params.email)
+    let tempEmail = req.params.email
+    req.params.email = null
+    delete req.body.password
+
+    User.forgotPassword(tempEmail)
       .then(token => res.json(token))
       .catch(err => res.status(err.status).send(err))
   })
   
+  router.put('/updatePassword/:email/:password', (req, res) => {
+    debug('#PUT /updatePassword/:email/:password')
+
+    let tempEmail = req.params.email
+    req.params.email = null
+    delete req.params.email
+
+    let tempPassword = req.params.password
+    req.params.password = null
+    delete req.params.password
+
+    User.updatePassword(tempEmail, tempPassword)
+      .then(token => res.json(token))
+      .catch(err => res.status(err.status).send(err))
+  })
+
   router.get('/signin', basicAuth, (req, res) => {
     debug('#GET /signin')
 
