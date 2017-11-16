@@ -30,9 +30,15 @@ describe('User Test Module', function(){
       test('should update a user', () => {
         return superagent.put(`${TEST_API_URL}/api/updatePassword/${mockUser.email}/uwotmate`)
           .set('Authorization', `Bearer ${this.res.body}`)
-          .then(res => expect(200).toBe(200))
+          .then(res => expect(this.res.status).toBe(200))
       })
       
+      test('should reset the password of a user', () => {
+        return superagent.put(`${TEST_API_URL}/api/forgotPassword/${mockUser.email}`)
+          .set('Authorization', `Bearer ${this.res.body}`)
+          .then(res => expect(this.res.status).toBe(200))
+      })
+
     })
  
  
