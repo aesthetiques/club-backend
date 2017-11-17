@@ -8,6 +8,7 @@ const debug = require('debug')('club-user-routes')
 
 module.exports = function(router){
 
+  //signup requires username, email, password
   router.post('/signup', (req, res) => {
     debug('#POST /signup')
 
@@ -20,6 +21,8 @@ module.exports = function(router){
       .catch(err => res.status(err.status).send(err.message))
   })
 
+
+  //signs in using basic auth. expects username and password
   router.get('/signin', basicAuth, (req, res) => {
     debug('#GET /signin')
 
@@ -28,6 +31,8 @@ module.exports = function(router){
       .catch(err => res.status(err.status).send(err.message))
   })
 
+  //User list for the OG Admin account - just for adjusting the users that 
+  //came afterwards if somebody is losing access to the application.
   router.get('/userList', bearerAuth, (req, res) => {
     debug('#GET /userList')
 
@@ -36,6 +41,8 @@ module.exports = function(router){
       .catch(err => res.status(err.stauts).send(err))
   })
 
+  //resets to a random password, searching by email in body,
+  //TODO: send email to user including the new password and a link back to the login page.
   router.put('/forgotPassword', (req, res) => {
     debug('#PUT /forgotPassword')
 
@@ -45,9 +52,10 @@ module.exports = function(router){
 
     User.forgotPassword(tempEmail)
       .then(token => res.json(token))
-      .catch(err => res.status(err.status).send(err))
+      .catch(err => res.status(err.status).send(err.message))
   })
   
+  //updates password, searching by email, updating with the password, both required in the body
   router.put('/updatePassword', bearerAuth, (req, res) => {
     debug('#PUT /updatePassword')
 
@@ -61,9 +69,10 @@ module.exports = function(router){
 
     User.updatePassword(tempEmail, tempPassword)
       .then(token => res.json(token))
-      .catch(err => res.status(err.status).send(err))
+      .catch(err => res.status(err.status).send(err.message))
   })
 
+  //searches by email in the body
   router.delete('/deleteUser', bearerAuth, (req, res) => {
     debug('#DELETE /deleteUser')
 
@@ -72,8 +81,8 @@ module.exports = function(router){
     delete req.body.email
 
     User.deleteUser(tempEmail)
-      .then(deletedUser => deletedUser)
-      .catch(err => res.status(err.status).send(err))
+      .then(deletedUser => res.json(deletedUser))
+      .catch(err => res.status(err.status).send(err.message))
   })
 
   return router

@@ -92,7 +92,7 @@ User.signup = function(userData, password){
 User.signin = function(userData){
   debug('#login')
   if(!userData.username) return Promise.reject(createError(400, 'username required'))
-  if(!userData.password) return Promise.reject(400, 'Password required')
+  if(!userData.password) return Promise.reject(createError(400, 'Password required'))
 
   return User.findOne({username: userData.username})
     .then(user => user.comparePasswordHash(userData.password))

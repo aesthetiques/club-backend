@@ -31,11 +31,11 @@ describe('User Test Module', function(){
       test('should update a user', () => {
         return superagent.put(`${TEST_API_URL}/api/updatePassword`)
           .set('Authorization', `Bearer ${token}`)
+          .set('Content-Type', 'application/json')
           .send({
             "email": `${mockUser.email}`, 
             "password": "uwotmate"
           })
-          .set('Content-Type', 'application/json')
           .then(res => expect(this.res.status).toBe(200))
       })
       
@@ -51,14 +51,16 @@ describe('User Test Module', function(){
   })
 
   // describe('invalid requests', function(){
-  //   describe('PUT password bad requests', () => {
+  //   describe('PUT updatePassword bad requests', () => {
 
-      // test('missing request data', () => {
-      //   return superagent.put(`${TEST_API_URL}/api/updatePassword`)
-      //     .set('Authorization', `Bearer ${token}`)
-      //     .send(mockUser.email, 'uwatm8')
-      //     .then(res => expect(res.status).toBe(400))
-      // })
+  //     test('missing request data', () => {
+  //       superagent.put(`${TEST_API_URL}/api/updatePassword`)
+  //         .set('Authorization', `Bearer ${token}`)
+  //         .send({ 
+  //           "email": `${mockUser.email}`
+  //         })
+  //         .then(() => expect(err.status).toBe(400))
+  //     })
   //   })
   // })
 
