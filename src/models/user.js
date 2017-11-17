@@ -98,7 +98,7 @@ User.signin = function(userData){
     .then(user => user.comparePasswordHash(userData.password))
     .then(user => user.generateToken())
     .then(token => token)
-    .catch(err => Promise.reject(createError(err.status, err.message)))
+    .catch(err => Promise.reject(createError(404, err.message)))
 }
 
 User.listUsers = function(){
@@ -106,7 +106,7 @@ User.listUsers = function(){
 
   return User.find()
     .then(userList => Promise.resolve(userList))
-    .catcH(err => Promise.reject(createError(err.status, err.message)))
+    .catch(err => Promise.reject(createError(404, err.message)))
 }
 
 User.forgotPassword = function(email){
@@ -125,7 +125,7 @@ User.forgotPassword = function(email){
         email
       }
     })
-    .catch(err => Promise.reject(createError(err.status, err.message)))
+    .catch(err => Promise.reject(createError(404, err.message)))
 }
 
 User.updatePassword = function(email, password){
@@ -137,7 +137,7 @@ User.updatePassword = function(email, password){
     .then(user => user.generateToken())
     .then(token => token)
     .then(() => password)
-    .catch(err => Promise.reject(createError(err.status, err.message)))
+    .catch(err => Promise.reject(createError(404, err.message)))
 }
 
 User.deleteUser = function(email){
@@ -145,7 +145,7 @@ User.deleteUser = function(email){
   
   return User.findOneAndRemove(email)
     .then(user => Promise.resolve(user))
-    .catch(err => Promise.reject(createError(err.status, err.message)))
+    .catch(err => Promise.reject(createError(404, err.message)))
 }
 
 export default User

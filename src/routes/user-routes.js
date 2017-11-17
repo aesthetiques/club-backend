@@ -36,11 +36,11 @@ module.exports = function(router){
       .catch(err => res.status(err.stauts).send(err))
   })
 
-  router.put('/forgotPassword/:email', (req, res) => {
-    debug('#PUT /forgotPassword/:email')
+  router.put('/forgotPassword', (req, res) => {
+    debug('#PUT /forgotPassword')
 
-    let tempEmail = req.params.email
-    req.params.email = null
+    let tempEmail = req.body.email
+    req.body.email = null
     delete req.body.password
 
     User.forgotPassword(tempEmail)
@@ -48,28 +48,28 @@ module.exports = function(router){
       .catch(err => res.status(err.status).send(err))
   })
   
-  router.put('/updatePassword/:email/:password', bearerAuth, (req, res) => {
-    debug('#PUT /updatePassword/:email/:password')
+  router.put('/updatePassword', bearerAuth, (req, res) => {
+    debug('#PUT /updatePassword')
 
-    let tempEmail = req.params.email
-    req.params.email = null
-    delete req.params.email
+    let tempEmail = req.body.email
+    req.body.email = null
+    delete req.body.email
 
-    let tempPassword = req.params.password
-    req.params.password = null
-    delete req.params.password
+    let tempPassword = req.body.password
+    req.body.password = null
+    delete req.body.password
 
     User.updatePassword(tempEmail, tempPassword)
       .then(token => res.json(token))
       .catch(err => res.status(err.status).send(err))
   })
 
-  router.delete('/deleteUser/:email', bearerAuth, (req, res) => {
-    debug('#DELETE /deleteUser/:email')
+  router.delete('/deleteUser', bearerAuth, (req, res) => {
+    debug('#DELETE /deleteUser')
 
-    let tempEmail = req.params.email
-    req.params.email = null
-    delete req.params.email
+    let tempEmail = req.body.email
+    req.body.email = null
+    delete req.body.email
 
     User.deleteUser(tempEmail)
       .then(deletedUser => deletedUser)
